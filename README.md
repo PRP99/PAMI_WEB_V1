@@ -21,3 +21,4 @@ Le logiciel est développé sous VSCode et PlatformIO. Il utilise les librairies
 - waspinator/AccelStepper@^1.64
 - PCF8575 de  Renzo Mischianti (voir répertoire lib : choix d'option + correction de bug)
 
+Le choix du réseau WIFi doit être fait dans le fichier /src/webServer.cpp
