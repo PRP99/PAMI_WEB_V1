@@ -5,6 +5,7 @@
 #include "mouvement.h"
 #include "position.h"
 
+// input your local WIFi data
 #define MY_WIFI_SSID "Local_SSID"
 #define MY_WIFI_PASSWORD "Local_password"
 
