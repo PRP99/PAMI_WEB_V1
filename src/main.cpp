@@ -361,7 +361,9 @@ positionCourante.setTeta(0.0);
 
 // Connect to Wi-Fi network 
 connectWIFI();
-
+// affiche adresse sur OLED
+afficheLigne(32,16,WiFi.localIP().toString());
+afficheLigne(0,16,"PAMI pret");
 }
 
 void loop() {
