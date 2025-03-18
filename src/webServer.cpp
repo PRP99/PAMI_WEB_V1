@@ -12,9 +12,9 @@ extern void initDetection(int tofIndice, bool actif, uint16_t seuilMM,bool sens 
 // pour affichage sur OLED
 extern void afficheLigne(int16_t y, int16_t ey, String text);
 
-// Replace with your network credentials
-const char* ssid = "My_ssid";
-const char* password = "My_password";
+// My network credentials
+const char* ssid = MY_WIFI_SSID;
+const char* password = MY_WIFI_PASSWORD;
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -47,11 +47,12 @@ void connectWIFI(){
     delay(500);
     Serial.print(".");
   }
-  // Print local IP address and start web server
+  // Print local IP address 
   Serial.println("");
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  // start web server
   server.begin();
 }
 
@@ -82,18 +83,18 @@ void sendMainPage (WiFiClient * client){
   client->println("<!DOCTYPE html><html><head><meta charset=\"utf-8\">");
   client->println("<title>CDE Robot V1.0</title>");
   client->println("<style>body,.norm {font-family: Arial,Helvetica,sans-serif;font-size: 3vw;}");
-  client->println(".myb{font-size: 4vw;width:20vw;}.mybl{font-size: 3vw;width:30vw;}.seph{display:inline-block;width:5vw;}");
+  client->println(".myb{font-size: 4vw;width:20vw;}.mybl{font-size: 3vw;width:30vw;}.myzn{font-size: 3vw;width:10vw;}.seph{display:inline-block;width:5vw;}");
   client->println(".sepv {min-height:3vw;}.myheader {font-size: 8vw;}.inl {display:inline-block;}</style>");
   client->println("</head><body><header class\"myheader\">Télé PAMI V1.0</header>");
   // zone commande de mouvements
   client->println("<div class=\"sepv\"></div>");
   client->println("<div><button class=\"myb\" id=\"tdB\">Tout droit</button><div class=\"seph\"></div><label for=\"dist\">distance en mm</label>");
-  client->println("<input type=\"number\" id=\"dist\" min=\"10\" max=\"4000\" value=\"100\"></div><div class=\"sepv\"></div>");
+  client->println("<input type=\"number\" id=\"dist\" class=\"myzn\" min=\"10\" max=\"4000\" value=\"100\"></div><div class=\"sepv\"></div>");
   client->println("<div><button class=\"myb\" id=\"roB\">Rotation</button><div class=\"seph\"></div><button class=\"myb\" id=\"viB\">Virage</button>");
   client->println("<div class=\"inl\"><input type=\"radio\" id=\"idDroit\" name=\"sens\" value=\"droit\" checked><label for=\"idDroit\">à droite</label>");
   client->println("<input type=\"radio\" id=\"idGauche\" name=\"sens\" value=\"gauche\"><label for=\"idGauche\">à gauche</label></div>");
-  client->println("<div class=\"sepv\"></div><label for=\"angle\">angle</label><input type=\"number\" id=\"angle\" min=\"0\" max=\"360\" step=\"15\" value=\"90\">");
-  client->println("<label for=\"rayon\">rayon de courbure</label><input type=\"number\" id=\"rayon\" min=\"0\" max=\"500\" step=\"10\" value=\"100\"></div>");
+  client->println("<div class=\"sepv\"></div><label for=\"angle\">angle</label><input type=\"number\" id=\"angle\" class=\"myzn\" min=\"0\" max=\"360\" step=\"15\" value=\"90\">");
+  client->println("<label for=\"rayon\">rayon de courbure</label><input type=\"number\" id=\"rayon\" class=\"myzn\" min=\"0\" max=\"500\" step=\"10\" value=\"100\"></div>");
   // bouton et zone odométrie
   client->println("<div class=\"sepv\"></div><div><button class=\"mybl\" id=\"setOd\">Reset position</button><div class=\"seph\"></div><button class=\"mybl\" id=\"getOd\">Get position</button></div>");
   client->println("<div class=\"sepv\"></div><div><textarea id=\"idOd\" class=\"norm\" rows=\"3\" cols=\"42\" readonly>Zone position</textarea></div>");
@@ -263,21 +264,24 @@ void execInfo(WiFiClient * client){
   client->println(""); // fin de corps
 }
 
+// send position
+void sendPosition(WiFiClient * client){
+  client->println(positionCourante.toStringShort().c_str());
+  client->println(""); // fin de corps
+}
+
 // set origine Odométrie
 void execSetOrigin(WiFiClient * client){
   sendHeaderText(client);
   // reset de l'origine
   positionCourante.setPosition(0,0,0);
-  client->println("x=0,y=0,teta=0");
-  client->println(""); // fin de corps
+  sendPosition(client);
 }
 
 // get odométrie
 void execGetPosition (WiFiClient * client){
   sendHeaderText(client);
-  // TODO récupérer la position
-  client->println(positionCourante.toStringShort().c_str());
-  client->println(""); // fin de corps
+  sendPosition(client);
 }
 /* analyse la requête reçue et fait le traitement approprié + réponse HTTP
  * la requête est dans la variable globale header

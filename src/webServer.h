@@ -5,6 +5,9 @@
 #include "mouvement.h"
 #include "position.h"
 
+#define MY_WIFI_SSID "Local_SSID"
+#define MY_WIFI_PASSWORD "Local_password"
+
 enum  Mvt {MVT_NONE, MVT_TOUT_DROIT, MVT_ROTATION, MVT_VIRAGE};
 enum Sens {SENS_BAD, SENS_DROIT, SENS_GAUCHE};
 

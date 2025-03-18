@@ -5,7 +5,7 @@ std::string Position::toString(){
 }
 
 std::string Position::toStringShort(){
-    return "X= "+  std::to_string(_x) +" Y = "+ std::to_string(_y)+ " Teta = "+std::to_string(_teta);
+    return "X= "+  std::to_string((int)_x) +" Y = "+ std::to_string((int)_y)+ " Teta = "+std::to_string((int)_teta);
 }
 
 float Position::setTeta(float teta){
